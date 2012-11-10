@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 
 import org.apache.commons.codec.binary.Base64;
@@ -15,6 +16,9 @@ import org.json.simple.parser.JSONParser;
 public class SearchRunner {
 
 	static String BING_API_KEY = "xaGM3hcKEWMx00/z9tB71zIDIuvtr/hkYEMP5oNr6G0="; 
+	
+	
+	
 	public static String search(String query) throws Exception {
 	    String bingUrl = "https://api.datamarket.azure.com/Bing/Search/Web?Query=%27" + java.net.URLEncoder.encode(query) + "%27&$format=JSON";
 
@@ -37,13 +41,11 @@ public class SearchRunner {
 	    in.close();
 	    return sb.toString();
 	  }
-	/**
-	 * @param args
-	 * @throws Exception 
-	 */
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-		String searchResult =SearchRunner.search("Mike Ehrenberg");
+	
+	public static ArrayList<String> getUrlsFromKeyword(String query) throws Exception{
+		ArrayList<String> urlList;
+		String searchResult =SearchRunner.search(query);
+		urlList = new ArrayList<String>();
 		JSONParser parser = new JSONParser();
 		JSONObject json = (JSONObject)parser.parse(searchResult);
 		String top = json.get("d").toString();
@@ -55,9 +57,9 @@ public class SearchRunner {
 			JSONObject obj2=(JSONObject)array.get(i);
 			json = (JSONObject)parser.parse(obj2.toString());
 			String Url = top = json.get("Url").toString();
-			System.out.println(Url);
+			urlList.add(Url);
 		}
-		
+		return urlList;
 	}
 
 }
