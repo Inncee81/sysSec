@@ -15,9 +15,7 @@ import org.json.simple.parser.JSONParser;
 
 public class SearchRunner {
 
-	static String BING_API_KEY = "xaGM3hcKEWMx00/z9tB71zIDIuvtr/hkYEMP5oNr6G0="; 
-	
-	
+	static String BING_API_KEY = ""; 
 	
 	public static String search(String query) throws Exception {
 	    String bingUrl = "https://api.datamarket.azure.com/Bing/Search/Web?Query=%27" + java.net.URLEncoder.encode(query) + "%27&$format=JSON";
