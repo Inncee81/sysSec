@@ -79,11 +79,12 @@ def get_in_url(input_links):
     payload = {'key':'AIzaSyCfqoEWCqB7_MIqCF0eGKX6lbALUFqbnCE','cx':'002451276590484194388:tlniujq1r_k','q':query,'alt':'json'}
     r = requests.get('https://www.googleapis.com/customsearch/v1?',params=payload)
     result_links=[]
-    items = r.json['items']
-    for item in items:
-      result_links.append(item['link'])
-    for link in result_links: 
-      in_url_file.write("%s\n" % (link))
+    items = r.json['items'] if 'items' in r.json else None
+    if items:
+      for item in items:
+        result_links.append(item['link'])
+      for link in result_links: 
+        in_url_file.write("%s\n" % (link))
        
   
 def main():
@@ -92,8 +93,11 @@ def main():
   
   #check_safe_url()
 
-  input_links=["cs.stonybrook.edu"]
-  get_in_url(input_links)
+  file_name = "insecure"
+  with open(file_name) as f:
+    content = f.readlines()
+ 
+  get_in_url(content)
 
 
 

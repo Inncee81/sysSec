@@ -5,17 +5,25 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 
 public class KeywordExtractor {
-	static String ALCHEMY_KEY = "";
-	public static ArrayList<String> getKeywords(String url) throws Exception{
+	static String ALCHEMY_KEY = "36e5b5e39a95a5528f9f8158a0fa52d2906e39ec";
+	public static ArrayList<String> getKeywords(String url, Logger logger){
 		AlchemyAPI alchemyObj = AlchemyAPI.GetInstanceFromString(ALCHEMY_KEY);
 		ArrayList<String> Keywords = new ArrayList<String>();
 		// Extract topic keywords for a web URL.
-        Document doc = alchemyObj.URLGetRankedKeywords(url);
-        doc.getDocumentElement().normalize();
+        Document doc;
+        try {
+          doc = alchemyObj.URLGetRankedKeywords(url);
+          doc.getDocumentElement().normalize();
 		//System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
         NodeList nList = doc.getElementsByTagName("keyword");
         //System.out.println("Length "  + nList.getLength());
@@ -26,6 +34,10 @@ public class KeywordExtractor {
         		 Keywords.add(getTagValue("text", eElement));
         	 }
         		 
+        }
+        }
+        catch(Exception e){
+          logger.info(url + " " + e.getMessage());
         }
        /* for(int i = 0 ; i < Keywords.size(); i ++){
 			System.out.println(Keywords.get(i));

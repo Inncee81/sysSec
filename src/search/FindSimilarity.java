@@ -19,8 +19,8 @@ public class FindSimilarity {
 	}
 	
 	public static double GetSimilarityPercentage(String toCompareUrl, String compareAgainstUrl) throws Exception{
-		ArrayList<String> toCompare = KeywordExtractor.getKeywords(toCompareUrl);
-		ArrayList<String> compareAgainst = KeywordExtractor.getKeywords(compareAgainstUrl);
+	//	ArrayList<String> toCompare = KeywordExtractor.getKeywords(toCompareUrl);
+		//ArrayList<String> compareAgainst = KeywordExtractor.getKeywords(compareAgainstUrl);
 		/*
 		System.out.println("To compare keywords");
 		for(int i = 0 ; i < toCompare.size(); i ++){
@@ -32,8 +32,9 @@ public class FindSimilarity {
 			System.out.println(compareAgainst.get(i));
 		}*/
 		
-		int numSimilarKeywords = GetNumberofSimilarKeywords(toCompare,compareAgainst);
-		double similarityPercent = (numSimilarKeywords*100.0)/toCompare.size();
-		return similarityPercent;
+		//int numSimilarKeywords = GetNumberofSimilarKeywords(toCompare,compareAgainst);
+		//double similarityPercent = (numSimilarKeywords*100.0)/toCompare.size();
+		//return similarityPercent;
+	  return 0;
 	}
 }
