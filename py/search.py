@@ -59,16 +59,16 @@ def process_links():
 def check_safe_url():
 
   edited_links = tuple(open("output",'r'))
-  """for site in edited_links:  
-    payload = {'apikey':'ABQIAAAAIK_XOS9WwzZndzj7983ENxRsRnAzCcE57y43-GwaNHKyNjL5jg','pver':'3.0','appver':'1.0','url':'qwerz.cn'}
+  for site in edited_links:  
+    payload = {'apikey':'ABQIAAAAIK_XOS9WwzZndzj7983ENxRsRnAzCcE57y43-GwaNHKyNjL5jg','pver':'3.0','appver':'1.0','url':site}
     r = requests.get("https://sb-ssl.google.com/safebrowsing/api/lookup?client=api",params=payload)
     if r.text == "":
       continue
     print "%s: %s" % (r.text,site)
-"""
-  payload = {'apikey':'ABQIAAAAIK_XOS9WwzZndzj7983ENxRsRnAzCcE57y43-GwaNHKyNjL5jg','pver':'3.0','appver':'1.0','url':'admincareers.com'}
+
+  """payload = {'apikey':'ABQIAAAAIK_XOS9WwzZndzj7983ENxRsRnAzCcE57y43-GwaNHKyNjL5jg','pver':'3.0','appver':'1.0','url':'admincareers.com'}
   r = requests.get("https://sb-ssl.google.com/safebrowsing/api/lookup?client=api",params=payload)
-  print "%s: %s" % (r.text,'n')
+  print "%s: %s" % (r.text,'n')"""
 
 
 def get_in_url(input_links):
@@ -90,10 +90,10 @@ def main():
   #download_raw_results()
   #process_links()
   
-  #check_safe_url()
+  check_safe_url()
 
-  input_links=["cs.stonybrook.edu"]
-  get_in_url(input_links)
+  #input_links=["cs.stonybrook.edu"]
+  #get_in_url(input_links)
 
 
 
