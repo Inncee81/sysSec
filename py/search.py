@@ -10,6 +10,7 @@ params = {'ImageFilters':'"Face:Face"','$format': 'json','$top': 200,'$skip': 0}
 lines = tuple(open("trending", 'r'))
 
 
+crawled_links=open("crawled_links",'a')
 
 raw_search_results=[] #raw search results
 
@@ -56,9 +57,9 @@ def process_links():
     p = urlparse.urlparse(site)
     output.write("%s\n" % p.netloc)
 
-def check_safe_url():
+def check_safe_url(filename):
 
-  edited_links = tuple(open("output",'r'))
+  edited_links = tuple(open(filename,'r'))
   for site in edited_links:  
     payload = {'apikey':'ABQIAAAAIK_XOS9WwzZndzj7983ENxRsRnAzCcE57y43-GwaNHKyNjL5jg','pver':'3.0','appver':'1.0','url':site}
     r = requests.get("https://sb-ssl.google.com/safebrowsing/api/lookup?client=api",params=payload)
@@ -71,30 +72,82 @@ def check_safe_url():
   print "%s: %s" % (r.text,'n')"""
 
 
-def get_in_url(input_links):
-  in_url_file = open("in_url_links",'w')
+def get_in_url(input_links,outputfilename):
+  in_url_file = open(outputfilename,'w')
 
   for link in input_links:
     query = '%s%s' % ("link:",link)
     payload = {'key':'AIzaSyCfqoEWCqB7_MIqCF0eGKX6lbALUFqbnCE','cx':'002451276590484194388:tlniujq1r_k','q':query,'alt':'json'}
     r = requests.get('https://www.googleapis.com/customsearch/v1?',params=payload)
     result_links=[]
-    items = r.json['items']
-    for item in items:
-      result_links.append(item['link'])
-    for link in result_links: 
-      in_url_file.write("%s\n" % (link))
-       
+    items = r.json['items'] if 'items' in r.json else None
+
+    print link
+    if items:
+      for item in items:
+        result_links.append(item['link'])
+      for link in result_links: 
+        in_url_file.write("%s\n" % (link))
+
+
+def yahoo_extract_bad(depth,link):
+
+  if (depth > 10):
+    return
   
+  
+  query = 'select * from html where url="www.google.com/safebrowsing/diagnostic?site=%s"' % (link) 
+  print query
+
+
+  params= {'q':query,'format':'json','diagnostics':'true'}
+  
+  print params
+
+  r = requests.get("http://query.yahooapis.com/v1/public/yql?",params=params)
+
+  """if r.json['query']:
+    if r.json['query']['results']:
+      if r.json['query']['results']['body']:
+        if r.json['query']['results']['body']['center']:
+          if r.json['query']['results']['body']['center']['div']:
+            if r.json['query']['results']['body']['center']['div']['blockquote']:
+                if r.json['query']['results']['body']['center']['div']['blockquote'][3]:
+                  if r.json['query']['results']['body']['center']['div']['blockquote'][3]['p']:
+                    if r.json['query']['results']['body']['center']['div']['blockquote'][3]['p']['a']:
+   """
+
+
+  json_len = len(r.json['query']['results']['body']['center']['div'][0]['div']['blockquote'][3])
+
+  print json_len
+  """
+    print "Length Greater than 1"
+    links = r.json['query']['results']['body']['center']['div'][0]['div']['blockquote'][3]['p']['a'] 
+    print "Links Extracted"
+    for link in links:
+      crawled_links.write("%s\n" % (link['content']))
+      print ("%s\n" % (link['content']))
+      #yahoo_extract_bad(depth+1,link['content'])  
+  
+  return
+  """
 def main():
   #download_raw_results()
   #process_links()
   
-  check_safe_url()
-
+  #check_safe_url()
   #input_links=["cs.stonybrook.edu"]
   #get_in_url(input_links)
+  """
+  file_name = "insecure"
+  with open(file_name) as f:
+    content = f.readlines()
+  """
+  #get_in_url(content,"in_url_links")
+  #check_safe_url("in_url_links")
 
+  yahoo_extract_bad(0,"diesel-stores.com")
 
 
 main()
