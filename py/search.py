@@ -2,6 +2,8 @@ import urlparse
 import requests
 from bing_search_api import BingSearchAPI 
 import codecs
+import lxml.html
+
 #definitions and declarations.
 
 my_key = "lijZiS7uFCLkkj8wKJ3EqwDC9sZzk/Qm3e7j5fosTh8="
@@ -90,39 +92,28 @@ def get_in_url(input_links,outputfilename):
         in_url_file.write("%s\n" % (link))
 
 
-def yahoo_extract_bad(depth,link):
+def yahoo_extract_bad(depth,link, link_hash):
 
   if (depth > 10):
     return
+  query = "http://www.google.com/safebrowsing/diagnostic?site=%s" % (link)
+#  print query
+  parser = lxml.html.parse(query)
+  hrefs = parser.xpath("//a/@href")
+#  print hrefs
+  for alink in hrefs:
+    index = alink.find('site=')
+    if(index is not -1):
+      if(alink[index+5:][0] is not 'A'):
+        parsed_link = alink[index+5:]
+        if (parsed_link not in link_hash): 
+          crawled_links.write("%s\n" % (parsed_link))
+          link_hash[parsed_link] = True
+          print ("%s\n" % (parsed_link))
+          yahoo_extract_bad(depth+1, parsed_link, link_hash)
+
   
-  
-  query = 'select * from html where url="www.google.com/safebrowsing/diagnostic?site=%s"' % (link) 
-  print query
-
-
-  params= {'q':query,'format':'json','diagnostics':'true'}
-  
-  print params
-
-  r = requests.get("http://query.yahooapis.com/v1/public/yql?",params=params)
-
-  """if r.json['query']:
-    if r.json['query']['results']:
-      if r.json['query']['results']['body']:
-        if r.json['query']['results']['body']['center']:
-          if r.json['query']['results']['body']['center']['div']:
-            if r.json['query']['results']['body']['center']['div']['blockquote']:
-                if r.json['query']['results']['body']['center']['div']['blockquote'][3]:
-                  if r.json['query']['results']['body']['center']['div']['blockquote'][3]['p']:
-                    if r.json['query']['results']['body']['center']['div']['blockquote'][3]['p']['a']:
-   """
-
-
-  json_len = len(r.json['query']['results']['body']['center']['div'][0]['div']['blockquote'][3])
-
-  print json_len
-  """
-    print "Length Greater than 1"
+  """ print "Length Greater than 1"
     links = r.json['query']['results']['body']['center']['div'][0]['div']['blockquote'][3]['p']['a'] 
     print "Links Extracted"
     for link in links:
@@ -146,8 +137,8 @@ def main():
   """
   #get_in_url(content,"in_url_links")
   #check_safe_url("in_url_links")
-
-  yahoo_extract_bad(0,"diesel-stores.com")
+  link_hash = {}
+  yahoo_extract_bad(0,"movie2k.to", link_hash)
 
 
 main()
