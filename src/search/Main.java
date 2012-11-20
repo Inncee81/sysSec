@@ -17,9 +17,9 @@ import java.util.logging.Logger;
 
 public class Main {
     public static Logger logger;
-	String insecureWebsiteList = "/home/avijit/workspace/newSysSec/sysSec/py/in_url_links";
-	String insecureKeywords = "/home/avijit/lists/insecureKeyWords";
-	String commonInsecureKeywords = "/home/avijit/lists/common";
+	String insecureWebsiteList = "/home/avijit/workspace/newSysSec/sysSec/py/malware_links";
+	String insecureKeywords = "/home/avijit/lists/insecureKeyWords_mal";
+	String commonInsecureKeywords = "/home/avijit/lists/common_mal";
 	/**
 	 * @param args
 	 */

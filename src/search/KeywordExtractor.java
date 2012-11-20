@@ -1,5 +1,7 @@
 package search;
 import com.alchemyapi.api.AlchemyAPI;
+import com.alchemyapi.api.AlchemyAPI_KeywordParams;
+
 import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,6 +24,10 @@ public class KeywordExtractor {
 		// Extract topic keywords for a web URL.
         Document doc;
         try {
+          AlchemyAPI_KeywordParams params = new AlchemyAPI_KeywordParams();
+          params.setMaxRetrieve(100);
+          alchemyObj.URLGetRankedKeywords(url, params);
+          
           doc = alchemyObj.URLGetRankedKeywords(url);
           doc.getDocumentElement().normalize();
 		//System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
