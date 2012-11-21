@@ -70,8 +70,8 @@ def process_links(infile, outfile):
   output = open(outfile,'wr')
   search_results_from_file = tuple(open(infile,'r'))
   for site in search_results_from_file:
-    print site
     site = site.decode('utf-8')
+    print site
     if not site.startswith('https') and not site.startswith(unicode('https')) and not site.startswith(unicode('http')) and not site.startswith('http'): 
       if not site.startswith('www'):
         site = "%s%s" % ('http://www.',site) 
@@ -85,10 +85,14 @@ def process_links(infile, outfile):
         site = "%s%s" % ('http://',site)
         edited_links.append(site)
         continue
+    else:
+      print "else"
+      print site 
+      edited_links.append(site)
 
   for site in edited_links:
     p = urlparse.urlparse(site)
-    output.write("%s\n" % p.netloc)
+    output.write("%s\n" % (p.netloc).encode('utf-8'))
 
 def check_safe_url(infile, outfile):
 
@@ -191,16 +195,31 @@ def main():
   #input_links=["cs.stonybrook.edu"]
   #get_in_url(input_links)
 #  download_raw_results("list1", "links1")
-  #process_links("links_insecure_keywords", "processed_malware_links")
-  #process_links("links_gray", "processed_gray_links")
+#  process_links("data/links_insecure_keywords", "data/processed_malware_links")
+#  process_links("data/links_gray", "data/processed_gray_links")
   #process_links(infile, outfile):
 
  # download_raw_results("celebrity_list", "links_celebrity")
 #  download_raw_results("pornkeys", "links_porn")
 #  download_raw_results("grayKeyWords_mal", "links_gray")
 #  download_raw_results("insecureKeyWords_mal", "links_insecure_keywords")
-  check_safe_url("processed_malware_links", "insecure_malware")
-  check_safe_url("processed_gray_links", "gray_malware")
+#  check_safe_url("data/pro_malaa", "data/insecure_malware_a")
+#  check_safe_url("data/pro_malab", "data/insecure_malware_b")
+#  check_safe_url("data/pro_malac", "data/insecure_malware_c")
+  check_safe_url("data/pro_malad", "data/insecure_malware_d")
+#  check_safe_url("data/pro_grayaa", "data/gray_malware_a")
+#  check_safe_url("data/pro_grayab", "data/gray_malware_b")
+#  check_safe_url("data/pro_grayac", "data/gray_malware_c")
+#  check_safe_url("data/pro_grayad", "data/gray_malware_d")
+#  check_safe_url("data/pro_grayae", "data/gray_malware_e")
+#  check_safe_url("data/pro_grayaf", "data/gray_malware_f")
+
+
+
+
+
+
+#  check_safe_url("processed_gray_links", "gray_malware")
   """
   file_name = "malware_links1"
   with open(file_name) as f:
